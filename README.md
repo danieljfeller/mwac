@@ -22,9 +22,9 @@ Washington.
 - **Responsive Design:** Ensures compatibility with various devices and screen sizes.
 
 #### Product Requirements: The user can select to plot a time series of one or more variables
-The user can alter the lookback window; from 30 days to entire winter
-The user can download all source data with a single click (ideally, able to filter certain years)
-The user can compare the current winter against the previous winter
+- The user can alter the lookback window; from 1 day to entire winter
+- The user can download all source data with a single click (ideally, able to filter certain years)
+- The user can compare the current winter against the previous winter
 
 
 ## Installation
