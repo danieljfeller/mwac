@@ -1,17 +1,23 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <LineGraph></LineGraph>
+
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import LineGraph from './LineGraph.vue'
 
 export default defineComponent({
-  name: "HelloWorld",
+  name: "MwacVis",
   props: {
     msg: String,
   },
+  components: {
+    LineGraph,
+  }
 });
 </script>
 
