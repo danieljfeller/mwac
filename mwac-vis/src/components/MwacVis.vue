@@ -1,7 +1,16 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <LineGraph></LineGraph>
+    <v-container>
+    <v-autocomplete
+    v-if="winters"
+    label="Select Winter"
+    :items="winters"
+    v-model="selected"
+    >
+    </v-autocomplete>
+    </v-container>
+    <LineGraph @winters="initWinters" :selected="selected" data-file-name="historical_averages.csv"></LineGraph>
 
   </div>
 </template>
@@ -17,7 +26,25 @@ export default defineComponent({
   },
   components: {
     LineGraph,
+  },
+  data(): {
+    winters: string[] | undefined,
+    selected: string | undefined,
+  } {
+    return {
+      winters: undefined,
+      selected: undefined,
+
+    }
+  },
+  methods: {
+    initWinters(winters: string[]){
+      this.winters = winters;
+
+    }
   }
+
+
 });
 </script>
 
