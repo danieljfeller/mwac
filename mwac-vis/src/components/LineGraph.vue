@@ -61,6 +61,10 @@ export default defineComponent({
         }
     },
     async mounted() {
+
+        // TODO add different color for selected versus hover
+        // Change work flow for selected, emitting up.
+
         const height = this.height ?? 600;
         const width = this.width ?? 928;
         const marginTop = 20;
@@ -195,8 +199,7 @@ export default defineComponent({
                     )
                 .raise();
      
-        
-
+    
         this.svg
             .on("pointerenter", this.pointerEntered)
             .on("pointermove", this.pointerMoved)
@@ -204,11 +207,31 @@ export default defineComponent({
             .on("touchstart", (event) => event.preventDefault())
             .on("click", this.selectYear);
     },
+    watch: {
+        selected(oldValue, newValue){
+            if (oldValue != newValue){
+                this.stylePath(-1);
+            }
+          
+        }
+    },
     methods: {
         pointerEntered(event: any) {
-            this.path
-                // .style("mix-blend-mode", null)
-                ?.style("stroke", "#ddd");
+            this.stylePath(-1);
+            // this.path
+            //     // .style("mix-blend-mode", null)
+            //     ?.style("stroke", ({ z }) => {
+            //         console.log(z);
+            //         if (z as any == "Average Winter"){
+            //             return "red";
+            //         } else if (z as any === this.selected){
+            //             return "steelblue";
+            //         } else {
+            //             return "#ddd"
+            //         }
+            //     })
+            //     .filter(({ z }) => z as any === this.selected || z as any == "Average Winter")
+            //     .raise();
             this.dot?.attr("display", null);
         },
         pointerMoved(event: any) {
@@ -217,20 +240,20 @@ export default defineComponent({
                 Math.hypot((x as number) - xm, (y as number) - ym)
             );
             const [x, y, k] = this.points![i!];
-          
-            this.path
-                ?.style("stroke", ({ z }) => {
-                    console.log(z);
-                    if (z as any == "Average Winter"){
-                        return "red";
-                    } else if (z === k){
-                        return "steelblue";
-                    } else {
-                        return "#ddd"
-                    }
-                })
-                .filter(({ z }) => z === k || z as any === "Average Winter")
-                .raise();
+            this.stylePath(i ?? -1);
+            // this.path
+            //     ?.style("stroke", ({ z }) => {
+            //         console.log(z);
+            //         if (z as any == "Average Winter"){
+            //             return "red";
+            //         } else if (z === k){
+            //             return "steelblue";
+            //         } else {
+            //             return "#ddd"
+            //         }
+            //     })
+            //     .filter(({ z }) => z === k || z as any === "Average Winter")
+            //     .raise();
             this.dot?.attr("transform", `translate(${x},${y})`);
             this.dot?.select("text").text(k as any);
             (this.svg?.property("value", this.data![i!]) as any).dispatch(
@@ -241,9 +264,7 @@ export default defineComponent({
             );
         },
         pointerLeft(event: any) {
-            this.path
-                // ?.style("mix-blend-mode", "multiply")
-                ?.style("stroke", null);
+            this.stylePath(-1);
             this.dot?.attr("display", "none");
             (this.svg as any).node().value = null;
             (this.svg as any).dispatch("input", { bubbles: true });
@@ -254,21 +275,33 @@ export default defineComponent({
                 Math.hypot((x as number) - xm, (y as number) - ym)
             );
             const [x, y, k] = this.points![i!];
-            this.highlightYear(k as string);
+            this.$emit('winter-selected', k);
+            
         },
-        highlightYear(year: string){
+        highlightYear(){
+            this.stylePath(-1);
+        },
+        stylePath(hoverId: number){
+            
+            const [x, y, k] = hoverId == -1? [-1, -1, -1]: this.points![hoverId!];
+        
+            
             this.path
             ?.style("stroke", ({ z }) => {
                     console.log(z);
                     if (z as any == "Average Winter"){
                         return "red";
-                    } else if (z as any === year){
+                    } else if (z as any === this.selected){
                         return "steelblue";
+                    } else if (z === k ) {
+                        return "green"
                     } else {
-                        return "#ddd"
+                        return "#ddd";
                     }
                 })
-                .filter(({ z }) => z as any === year || z as any == "Average Winter")
+                .filter(({ z }) => z as any === this.selected 
+                || z as any == "Average Winter"
+                || z == k)
                 .raise();
 
         },

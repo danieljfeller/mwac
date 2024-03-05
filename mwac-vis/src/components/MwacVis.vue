@@ -10,7 +10,7 @@
     >
     </v-autocomplete>
     </v-container>
-    <LineGraph @winters="initWinters" :selected="selected" data-file-name="historical_averages.csv"></LineGraph>
+    <LineGraph @winter-selected="selectWinter" @winters="initWinters" :selected="selected" data-file-name="historical_averages.csv"></LineGraph>
 
   </div>
 </template>
@@ -41,6 +41,9 @@ export default defineComponent({
     initWinters(winters: string[]){
       this.winters = winters;
 
+    },
+    selectWinter(winter: string){
+      this.selected = winter;
     }
   }
 
