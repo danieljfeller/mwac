@@ -20,7 +20,7 @@ interface SnowData {
 
 export default defineComponent({
     name: "LineGraph",
-    emits: ['winter-selected', 'winters'],
+    emits: ["winter-selected", "winters"],
     data(): {
         info: string;
         svg:
@@ -58,10 +58,9 @@ export default defineComponent({
         dataFileName: {
             type: Object as PropType<string>,
             required: true,
-        }
+        },
     },
     async mounted() {
-
         // TODO add different color for selected versus hover
         // Change work flow for selected, emitting up.
 
@@ -72,7 +71,7 @@ export default defineComponent({
         const marginBottom = 30;
         const marginLeft = 30;
 
-        const parentElement = ref('chart');
+        const parentElement = ref("chart");
 
         this.data = await this.getData();
         console.log(this.data);
@@ -149,20 +148,18 @@ export default defineComponent({
             .join("path")
             //.style("mix-blend-mode", "multiply")
             .attr("d", this.line as any)
-            .attr("stroke-width", (d: any)=>{
+            .attr("stroke-width", (d: any) => {
                 if (d.z == "Average Winter") {
-                    
                     return 3;
                 } else {
-                    
-                    return 1.5
+                    return 1.5;
                 }
             })
             .attr("stroke", (d: any) => {
                 console.log(d.z);
                 // Assuming "average winter group" is identified by a property like d.key
                 if (d.z == "Average Winter") {
-                    console.log('yay');
+                    console.log("yay");
                     return "red"; // Change color to red for average winter group
                 } else if (d.z == this.selected) {
                     return "steelblue"; // Keep color as steelblue for other groups // maybe something grayer
@@ -170,9 +167,6 @@ export default defineComponent({
                     return "#ddd";
                 }
             }) as any;
-
-
-    
 
         this.dot = this.svg.append("g").attr("display", "none");
 
@@ -192,32 +186,32 @@ export default defineComponent({
         // })
 
         this.path
-                ?.filter(({ z }) => {
-                    if ((z as any) == "Average Winter") console.log('cool');
-                    return (z as any) === "Average Winter"
-                }
-                    )
-                .raise();
-     
-    
+            ?.filter(({ z }) => {
+                if ((z as any) == "Average Winter") console.log("cool");
+                return (z as any) === "Average Winter";
+            })
+            .raise();
+
         this.svg
             .on("pointerenter", this.pointerEntered)
             .on("pointermove", this.pointerMoved)
             .on("pointerleave", this.pointerLeft)
             .on("touchstart", (event) => event.preventDefault())
             .on("click", this.selectYear);
+
+        // setTimeout(this.animatePath, 1000, "Average Winter");
+        this.animatePath("Average Winter");
     },
     watch: {
-        selected(oldValue, newValue){
-            if (oldValue != newValue){
-                this.stylePath(-1);
+        selected(oldValue, newValue) {
+            if (oldValue != newValue) {
+                this.stylePath(-1, true);
             }
-          
-        }
+        },
     },
     methods: {
         pointerEntered(event: any) {
-            this.stylePath(-1);
+            this.stylePath(-1, false);
             // this.path
             //     // .style("mix-blend-mode", null)
             //     ?.style("stroke", ({ z }) => {
@@ -240,7 +234,7 @@ export default defineComponent({
                 Math.hypot((x as number) - xm, (y as number) - ym)
             );
             const [x, y, k] = this.points![i!];
-            this.stylePath(i ?? -1);
+            this.stylePath(i ?? -1, false);
             // this.path
             //     ?.style("stroke", ({ z }) => {
             //         console.log(z);
@@ -264,48 +258,81 @@ export default defineComponent({
             );
         },
         pointerLeft(event: any) {
-            this.stylePath(-1);
+            this.stylePath(-1, false);
             this.dot?.attr("display", "none");
             (this.svg as any).node().value = null;
             (this.svg as any).dispatch("input", { bubbles: true });
         },
-        selectYear(event: any){
+        selectYear(event: any) {
             const [xm, ym] = d3.pointer(event);
             const i = d3.leastIndex(this.points!, ([x, y]) =>
                 Math.hypot((x as number) - xm, (y as number) - ym)
             );
             const [x, y, k] = this.points![i!];
-            this.$emit('winter-selected', k);
-            
+            this.$emit("winter-selected", k);
         },
-        highlightYear(){
-            this.stylePath(-1);
+        highlightYear() {
+            this.stylePath(-1, true);
         },
-        stylePath(hoverId: number){
-            
-            const [x, y, k] = hoverId == -1? [-1, -1, -1]: this.points![hoverId!];
-        
-            
+        stylePath(hoverId: number, justSelected: boolean) {
+            const [x, y, k] =
+                hoverId == -1 ? [-1, -1, -1] : this.points![hoverId!];
+
+            // If just selected add a animation for the line to become
+            // uncovered
+            // Todo add color palate.
             this.path
-            ?.style("stroke", ({ z }) => {
+                ?.style("stroke", ({ z }) => {
                     console.log(z);
-                    if (z as any == "Average Winter"){
+                    if ((z as any) == "Average Winter") {
                         return "red";
-                    } else if (z as any === this.selected){
+                    } else if ((z as any) === this.selected) {
                         return "steelblue";
-                    } else if (z === k ) {
-                        return "green"
+                    } else if (z === k) {
+                        return "green";
                     } else {
                         return "#ddd";
                     }
                 })
-                .filter(({ z }) => z as any === this.selected 
-                || z as any == "Average Winter"
-                || z == k)
+                .style("stroke-width", ({ z }) => {
+                    if ((z as any) === this.selected) {
+                        return 2.5;
+                    } else if ((z as any) == "Average Winter") {
+                        return 3;
+                    } else {
+                        return 1.5;
+                    }
+                })
+                .filter(
+                    ({ z }) =>
+                        (z as any) === this.selected ||
+                        (z as any) == "Average Winter" ||
+                        z == k
+                )
                 .raise();
-
+            if (justSelected) {
+                this.animatePath(this.selected!);
+            }
         },
-        
+        animatePath(winter: string) {
+            const selectedPath = this.path?.filter(({ z }) => {
+                return (z as any) === winter;
+            });
+
+            // Now you can get the total length of the selected path
+            const node = selectedPath?.node();
+            if (node) {
+                const length = (node as any).getTotalLength();
+                selectedPath
+                    ?.attr("stroke-dasharray", length + " " + length)
+                    .attr("stroke-dashoffset", length)
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0)
+                    .duration(1000)
+            }
+        },
+
         async getData() {
             const historicalDataRaw = await d3.csv(
                 "cleaned_hermit_lake_snowdepth.csv"
@@ -317,16 +344,17 @@ export default defineComponent({
                 winters.add(row.winter);
                 return {
                     date: new Date(row.date),
-                    depthCm: +row.depth_cm, 
+                    depthCm: +row.depth_cm,
                     year: +row.year,
                     month: +row.month,
                     day: +row.day,
                     monthDay: row.month_day,
                     winter: row.winter,
                     dayOfWinter: +row.day_of_winter,
-            }});
+                };
+            });
 
-            this.$emit('winters', [...winters]);
+            this.$emit("winters", [...winters]);
 
             const historicalAvgRaw = await d3.csv(this.dataFileName);
 

@@ -43,7 +43,11 @@ export default defineComponent({
 
     },
     selectWinter(winter: string){
-      this.selected = winter;
+      if (winter == this.selected){
+        this.selected = undefined;
+      } else {
+        this.selected = winter;
+      }
     }
   }
 
