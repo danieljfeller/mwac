@@ -5,28 +5,20 @@
 </template>
 
 <script lang="ts">
+import { SnowData } from "@/common/interfaces";
 import * as d3 from "d3";
 import { PropType, defineComponent, ref } from "vue";
 
-interface SnowData {
-    dayOfWinter: number;
-    depthCm: number;
-    date?: Date;
-    year?: number;
-    month?: number;
-    monthDay?: string;
-    winter: string;
-}
+
 
 export default defineComponent({
     name: "LineGraph",
-    emits: ["winter-selected", "winters"],
+    emits: ["winter-selected", "winter-hover"],
     data(): {
         info: string;
         svg:
             | d3.Selection<SVGSVGElement, undefined, null, undefined>
             | undefined;
-        data: SnowData[] | undefined;
         path:
             | d3.Selection<
                   d3.BaseType | SVGPathElement,
@@ -45,22 +37,23 @@ export default defineComponent({
             line: undefined,
             info: "",
             svg: undefined,
-            data: undefined,
             path: undefined,
             dot: undefined,
             points: undefined,
         };
     },
     props: {
+        data: {
+            type: Object as PropType<SnowData[]>,
+            required: true,
+        },
         height: Object as PropType<number>,
         width: Object as PropType<number>,
         selected: Object as PropType<string>,
-        dataFileName: {
-            type: Object as PropType<string>,
-            required: true,
-        },
     },
     async mounted() {
+        console.log('mounted');
+        
         // TODO add different color for selected versus hover
         // Change work flow for selected, emitting up.
 
@@ -73,8 +66,7 @@ export default defineComponent({
 
         const parentElement = ref("chart");
 
-        this.data = await this.getData();
-        console.log(this.data);
+       
 
         const x = d3
             .scaleLinear()
@@ -235,6 +227,10 @@ export default defineComponent({
             );
             const [x, y, k] = this.points![i!];
             this.stylePath(i ?? -1, false);
+            if (i){
+                this.$emit('winter-hover', i)
+            }
+            
             // this.path
             //     ?.style("stroke", ({ z }) => {
             //         console.log(z);
@@ -262,6 +258,9 @@ export default defineComponent({
             this.dot?.attr("display", "none");
             (this.svg as any).node().value = null;
             (this.svg as any).dispatch("input", { bubbles: true });
+            this.$emit('winter-hover', undefined);
+
+            
         },
         selectYear(event: any) {
             const [xm, ym] = d3.pointer(event);
@@ -333,38 +332,8 @@ export default defineComponent({
             }
         },
 
-        async getData() {
-            const historicalDataRaw = await d3.csv(
-                "cleaned_hermit_lake_snowdepth.csv"
-            );
-
-            const winters: Set<string> = new Set();
-
-            const historicalData: SnowData[] = historicalDataRaw.map((row) => {
-                winters.add(row.winter);
-                return {
-                    date: new Date(row.date),
-                    depthCm: +row.depth_cm,
-                    year: +row.year,
-                    month: +row.month,
-                    day: +row.day,
-                    monthDay: row.month_day,
-                    winter: row.winter,
-                    dayOfWinter: +row.day_of_winter,
-                };
-            });
-
-            this.$emit("winters", [...winters]);
-
-            const historicalAvgRaw = await d3.csv(this.dataFileName);
-
-            const avgData: SnowData[] = historicalAvgRaw.map((row) => ({
-                depthCm: +row.depth_cm,
-                winter: "Average Winter",
-                dayOfWinter: +row.day_of_winter,
-            }));
-            return [...historicalData, ...avgData];
-        },
+        
+        
     },
 });
 </script>
