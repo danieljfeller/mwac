@@ -56,9 +56,18 @@ export default defineComponent({
         
         // TODO add different color for selected versus hover
         // Change work flow for selected, emitting up.
+//         const container = document.getElementById('container');
+
+// // Set up initial SVG dimensions
+//         let svgWidth = container?.clientWidth;
+//         let svgHeight = container?.clientHeight;
+
+        // console.log('hv', svgHeight, svgWidth);
+
+
 
         const height = this.height ?? 600;
-        const width = this.width ?? 928;
+        const width = this.width ?? 1028;
         const marginTop = 20;
         const marginRight = 20;
         const marginBottom = 30;
@@ -148,10 +157,10 @@ export default defineComponent({
                 }
             })
             .attr("stroke", (d: any) => {
-                console.log(d.z);
+                // console.log(d.z);
                 // Assuming "average winter group" is identified by a property like d.key
                 if (d.z == "Average Winter") {
-                    console.log("yay");
+                    // console.log("yay");
                     return "red"; // Change color to red for average winter group
                 } else if (d.z == this.selected) {
                     return "steelblue"; // Keep color as steelblue for other groups // maybe something grayer
@@ -179,7 +188,7 @@ export default defineComponent({
 
         this.path
             ?.filter(({ z }) => {
-                if ((z as any) == "Average Winter") console.log("cool");
+               
                 return (z as any) === "Average Winter";
             })
             .raise();
@@ -282,13 +291,13 @@ export default defineComponent({
             // Todo add color palate.
             this.path
                 ?.style("stroke", ({ z }) => {
-                    console.log(z);
+                  
                     if ((z as any) == "Average Winter") {
-                        return "red";
+                        return "#F44336";
                     } else if ((z as any) === this.selected) {
-                        return "steelblue";
+                        return "#0091EA";
                     } else if (z === k) {
-                        return "green";
+                        return "#bbb";
                     } else {
                         return "#ddd";
                     }
@@ -298,6 +307,8 @@ export default defineComponent({
                         return 2.5;
                     } else if ((z as any) == "Average Winter") {
                         return 3;
+                    } else if (z === k ){
+                        return 2.5;
                     } else {
                         return 1.5;
                     }
@@ -337,5 +348,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style></style>

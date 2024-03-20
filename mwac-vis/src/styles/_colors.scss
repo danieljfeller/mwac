@@ -1,0 +1,30 @@
+// Primary Colors
+$primary-color: #03A9F4;
+$primary-color-light: lighten($primary-color, 20%);
+$primary-color-dark: darken($primary-color, 10%);
+$primary-color-darker: darken($primary-color, 20%);
+
+// Secondary Colors
+$secondary-color: $primary-color;
+$secondary-color-light: $primary-color-light;
+$secondary-color-dark: $primary-color-dark;
+
+// Accent Colors
+$accent-color-100: #80D8FF;
+$accent-color-200: #40C4FF;
+$accent-color-400: #00B0FF;
+$accent-color-700: #0091EA;
+
+// Success Color
+$success-color: #4CAF50;
+
+// Error Color
+$error-color: #F44336;
+
+// Additional Colors
+$background-color: #FFFFFF;
+$text-color: #212121;
+
+// Usage example
+
+
