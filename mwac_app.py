@@ -31,8 +31,8 @@ today = historical_data.loc[historical_data.winter == '2023-2024',]['day_of_wint
 
 col1, col2 = st.columns(2)
 col1.metric("Current Snowpack",
-          "55cm", "-67%")
-col2.metric("Total Snowfall", "251cm", "-43%")
+          "125cm", "-14%")
+col2.metric("Total Snowfall", "350cm", "+5%")
 
 # SELECT BOX
 st.divider()
