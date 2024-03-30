@@ -43,6 +43,7 @@ with tab1:
 
 
     # 24 hr metrics
+    st.header('24 hour Weather Stats', divider='rainbow')
     col1, col2, col3, col4, col5 = st.columns(5)
     col1.metric("Average Wind",
               "20mph", "+10mph")
@@ -56,18 +57,18 @@ with tab1:
     # precipitation; density, new snow (cm)
     # add axis labels for day
     st.divider()
-    st.title("New Snow & Snow Density")
+    st.header('New Snow & Snow Density', divider='rainbow')
     st.bar_chart(df[['day', 'new_snow_cm', 'snow_density_pct']], x = 'day') # for new_snow
     #st.line_chart # density
 
     st.divider()
-    st.title("Wind Speed")
+    st.header('Wind Speed', divider='rainbow')
     st.area_chart(df[['day', 'max_wind', 'avg_wind', 'min_wind']], x = 'day')
     # add axis labels for day
 
 
     st.divider()
-    st.title("Temperature")
+    st.header('Temperature', divider='rainbow')
     st.line_chart(df[['day', 'max_temp', 'min_temp']], x = 'day', y = ['max_temp', 'min_temp'])
     # add axis labels for day
 
