@@ -38,23 +38,35 @@ with tab1:
     df['max_wind'] = df['avg_wind'] + np.random.uniform(3, 12, size=100)
     df['min_wind'] = df['avg_wind'] - np.random.uniform(5, 12, size=100)
     df['min_temp'] = df['max_temp'] - np.random.uniform(4, 20, size=100)
-    df['new_swe'] = df['new_snow_cm'] * np.random.uniform(0.1, 0.15, size=100)
+    df['new_swe_mm'] = df['new_snow_cm'] * np.random.uniform(0.1, 0.15, size=100)
+    df['snow_density_pct'] = (df['new_swe_mm'] / df['new_snow_cm'])*100
 
     # temperature
+
+
+
+    # COMBINED BAR AND LINE CHART
+    # precipitation; density, new snow (cm)
+    # add axis labels for day
     st.divider()
-    st.title("Temperature - 5000 ft.")
+    st.title("New Snow & Snow Density")
+    st.bar_chart(df[['day', 'new_snow_cm', 'snow_density_pct']], x = 'day') # for new_snow
+    st.line_chart # density
+
+    st.divider()
+    st.title("Wind Speed")
+    st.area_chart(df[['day', 'max_wind', 'avg_wind', 'min_wind']], x = 'day')
+    # add axis labels for day
+
+
+    st.divider()
+    st.title("Temperature")
     st.line_chart(df[['day', 'max_temp', 'min_temp']], x = 'day', y = ['max_temp', 'min_temp'])
+    # add axis labels for day
 
     # wind lind chart; daily max, min, and avg
 
-    st.divider()
-    st.title("Daily Wind Speeds")
-    st.area_chart(df[['day', 'max_wind', 'avg_wind', 'min_wind']], x = 'day')
 
-    # precipitation; density, new snow (cm),
-    st.divider()
-    st.title("Precipitation")
-    st.bar_chart(df[['day', 'new_snow_cm', 'new_swe']], x = 'day')
 
 #################
 # Snowdepth Tab #
