@@ -18,7 +18,11 @@ historical_averages = historical_averages.drop(['depth_cm'], axis = 1)
 ###############
 
 
-tab1, tab2 = st.tabs(["Weather Data Viewer", "Snowpack Data Viewer"])
+tab1, tab2, tab3 = st.tabs(["Observatory & NFS Weather Data Viewer", "MWAC Snowpack Data Viewer", "Download MWAC Our Data"])
+
+#######################
+# Weather Data Viewer #
+#######################
 
 with tab1:
 
@@ -52,24 +56,19 @@ with tab1:
     st.title("Precipitation")
     st.bar_chart(df[['day', 'new_snow_cm', 'new_swe']], x = 'day')
 
+#################
+# Snowdepth Tab #
+#################
+
 with tab2:
     # TITLE & INFORMATION
     st.title("Snowdepth at Hermit Lake")
+
+    # METRICS
     def convert_df(df):
         # IMPORTANT: Cache the conversion to prevent computation on every rerun
         return df.to_csv().encode('utf-8')
-
     csv = convert_df(historical_data)
-
-    st.download_button(
-        label="Download data as CSV",
-        data=csv,
-        file_name='hermit_lake_snowdepth.csv',
-        mime='text/csv',
-    )
-    st.divider()
-
-    # METRICS
     today = historical_data.loc[historical_data.winter == '2023-2024',]['day_of_winter'].max()
 
     col1, col2 = st.columns(2)
@@ -87,8 +86,24 @@ with tab2:
     # LINE CHART
     st.area_chart(df, x="day_of_winter", y=["historical_depth", "depth_cm"])
 
+##########################
+# Download MWAC Data tab #
+##########################
 
+with tab3:
 
+    def convert_df(df):
+        # IMPORTANT: Cache the conversion to prevent computation on every rerun
+        return df.to_csv().encode('utf-8')
 
+    csv = convert_df(historical_data)
+
+    st.download_button(
+        label="Download data as CSV",
+        data=csv,
+        file_name='hermit_lake_snowdepth.csv',
+        mime='text/csv',
+    )
+    st.divider()
 
 
