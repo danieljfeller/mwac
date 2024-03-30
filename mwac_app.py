@@ -41,17 +41,24 @@ with tab1:
     df['new_swe_mm'] = df['new_snow_cm'] * np.random.uniform(0.1, 0.15, size=100)
     df['snow_density_pct'] = (df['new_swe_mm'] / df['new_snow_cm'])*100
 
-    # temperature
+
+    # 24 hr metrics
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.metric("Average Wind",
+              "20mph", "+10mph")
+    col2.metric("Max Wind", "43mph")
+    col3.metric("24 snowfall (cm)", "5cm", "+5cm")
+    col4.metric("Max Temp", "23F")
+    col5.metric("Min Temp", "10F")
 
 
-
-    # COMBINED BAR AND LINE CHART
+    # CHART 1: COMBINED BAR AND LINE CHART
     # precipitation; density, new snow (cm)
     # add axis labels for day
     st.divider()
     st.title("New Snow & Snow Density")
     st.bar_chart(df[['day', 'new_snow_cm', 'snow_density_pct']], x = 'day') # for new_snow
-    st.line_chart # density
+    #st.line_chart # density
 
     st.divider()
     st.title("Wind Speed")
@@ -85,8 +92,8 @@ with tab2:
 
     col1, col2 = st.columns(2)
     col1.metric("Current Snowpack",
-              "175m", "-2%")
-    col2.metric("Total Snowfall", "350cm", "+5%")
+              "111cm", "-8% YoY")
+    col2.metric("Total Snowfall", "350cm", "+5% YoY")
 
     # SELECT BOX
     st.divider()
@@ -111,14 +118,15 @@ with tab3:
     csv = convert_df(historical_data)
 
     md = st.text_area('This data has been collected daily at Hermit Lake since 2001. Happy Researching! :balloon:')
-    st.markdown(md)
-
     st.download_button(
         label="Download data as CSV",
         data=csv,
         file_name='hermit_lake_snowdepth.csv',
         mime='text/csv',
     )
+    st.markdown(md)
+
+
     st.divider()
 
 
