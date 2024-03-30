@@ -57,7 +57,7 @@ with tab1:
     # precipitation; density, new snow (cm)
     # add axis labels for day
     st.divider()
-    st.title('Past Weather Data', divider='rainbow')
+    st.title('Past Weather Data')
     st.header('New Snow & Snow Density', divider='rainbow')
     st.bar_chart(df[['day', 'new_snow_cm', 'snow_density_pct']], x = 'day') # for new_snow
     #st.line_chart # density
