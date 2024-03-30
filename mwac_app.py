@@ -110,6 +110,9 @@ with tab3:
 
     csv = convert_df(historical_data)
 
+    md = st.text_area('This data has been collected daily at Hermit Lake since 2001. Happy Researching! :balloon:')
+    st.markdown(md)
+
     st.download_button(
         label="Download data as CSV",
         data=csv,
