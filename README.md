@@ -57,7 +57,7 @@ https://api.weather.gov/points/44.27028000000007,-71.30332999999996
 
 2. Receive a JSON document and find the forecast property inside the properties object
    - Find the hourly forecast from the forecastHourly property and retrieve that URL:
-   - "https://api.weather.gov/gridpoints/GYX/37,81/forecast/hourly"
+   - Example: https://api.weather.gov/gridpoints/GYX/37,81/forecast/hourly
 
 Gridpoint data information:
 - Document contains data about the forecast grid, with multiple layers of data
