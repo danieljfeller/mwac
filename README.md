@@ -47,6 +47,39 @@ streamlit run app.py
 
 Navigate to the provided local URL in your web browser to interact with the application.
 
+## National Weather Service Forecast API 
+
+In the United States, api.weather.gov represents the data services available to the public from the National Weather Service.
+
+Service Definition (OpenAPI v3.0/Swagger): https://api.weather.gov/openapi.json
+
+1. Retreive metadata from the KMWN station at the Mount Washington Summit here:
+https://api.weather.gov/points/44.27028000000007,-71.30332999999996
+
+2. Receive a JSON document and find the forecast property inside the properties object
+   - Find the hourly forecast from the forecastHourly property:
+   - "https://api.weather.gov/gridpoints/GYX/37,81/forecast/hourly"
+
+Gridpoint data information:
+- Presented in JSON format
+- Document contains data about the forecast grid, with multiple layers of data
+- The data is presented as a time series, in an hourly format
+
+Relevant available data layers:
+- temperature
+- dewpoint
+- maxTemperature
+- minTemperature
+- relativeHumidity
+- skyCover
+- windDirection
+- windSpeed
+- weather
+- quantitativePrecipitation
+- snowfallAmount
+- snowLevel
+- iceAccumulation
+
 ## Contributing
 
 Contributions to the Mt. Washington Snowpack Visualization App are welcome. Please follow these steps to contribute:
