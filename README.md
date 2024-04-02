@@ -48,7 +48,6 @@ streamlit run app.py
 Navigate to the provided local URL in your web browser to interact with the application.
 
 ## National Weather Service Forecast API 
-
 In the United States, api.weather.gov represents the data services available to the public from the National Weather Service.
 
 Service Definition (OpenAPI v3.0/Swagger): https://api.weather.gov/openapi.json
@@ -57,11 +56,10 @@ Service Definition (OpenAPI v3.0/Swagger): https://api.weather.gov/openapi.json
 https://api.weather.gov/points/44.27028000000007,-71.30332999999996
 
 2. Receive a JSON document and find the forecast property inside the properties object
-   - Find the hourly forecast from the forecastHourly property:
+   - Find the hourly forecast from the forecastHourly property and retrieve that URL:
    - "https://api.weather.gov/gridpoints/GYX/37,81/forecast/hourly"
 
 Gridpoint data information:
-- Presented in JSON format
 - Document contains data about the forecast grid, with multiple layers of data
 - The data is presented as a time series, in an hourly format
 
