@@ -25,9 +25,13 @@ tab1, tab2, tab3 = st.tabs(["Observatory & NFS Weather Data Viewer", "MWAC Snowp
 #######################
 
 with tab1:
+    st.image('mwac_logo.png', use_column_width  = 'always')
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.image
     #################
     # GENERATE DATA #
     #################
+
 
     df = pd.DataFrame({
         'day': np.arange(1, 15),
