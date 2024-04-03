@@ -25,20 +25,23 @@ tab1, tab2, tab3 = st.tabs(["Observatory & NFS Weather Data Viewer", "MWAC Snowp
 #######################
 
 with tab1:
+    #################
+    # GENERATE DATA #
+    #################
 
-    # create synthetic data
     df = pd.DataFrame({
-        'day': np.arange(1, 101),
-        'max_temp': np.random.randint(20, 33, size=100),
-        'new_snow_cm': np.random.randint(1, 11, size=100),
-        'avg_wind': np.random.uniform(1, 100, size=100),
-        'mean_direction': np.random.uniform(180, 270, size=100)
+        'day': np.arange(1, 15),
+        'max_temp': np.random.randint(20, 33, size=14),
+        'new_snow_cm': np.random.randint(1, 11, size=14),
+        'avg_wind': np.random.uniform(1, 100, size=14),
+        'mean_direction': np.random.uniform(180, 270, size=14)
     })
 
-    df['max_wind'] = df['avg_wind'] + np.random.uniform(3, 12, size=100)
-    df['min_wind'] = df['avg_wind'] - np.random.uniform(5, 12, size=100)
-    df['min_temp'] = df['max_temp'] - np.random.uniform(4, 20, size=100)
-    df['new_swe_mm'] = df['new_snow_cm'] * np.random.uniform(0.1, 0.15, size=100)
+    df['max_wind'] = df['avg_wind'] + np.random.uniform(3, 12, size=14)
+    df['min_wind'] = df['avg_wind'] - np.random.uniform(5, 12, size=14)
+    df['min_temp'] = df['max_temp'] - np.random.uniform(4, 20, size=14)
+    df['new_swe_mm'] = df['new_snow_cm'] * np.random.normal(0.1, 0.15, size=14)
+
     df['snow_density_pct'] = (df['new_swe_mm'] / df['new_snow_cm'])*100
 
 
@@ -51,6 +54,34 @@ with tab1:
     col3.metric("24 snowfall (cm)", "5cm", "+5cm")
     col4.metric("Max Temp", "23F")
     col5.metric("Min Temp", "10F")
+    
+    st.header('AI-generated forecast summary', divider='rainbow')
+
+    st.markdown('''The next 5 days will include up to 3 feet of new snow on an icy bed surface. Weather will entail significant wind speeds, with temperatures ranging from -10°F to 35°F. The forecast predicts accumulative snowfall reaching up to 9 inches over the period, accompanied by rapid changes in weather conditions, including sunny days and snow showers. This variability underscores the mountain's reputation for unpredictable and extreme weather conditions, exemplifying the challenges of meteorological forecasting in alpine environments. ''')
+
+
+    st.header('Forecast Data', divider='rainbow')
+
+    st.subheader('New Snow & Snow Density')
+    st.bar_chart(df[['day', 'new_snow_cm', 'snow_density_pct']], x = 'day') # for new_snow
+    #st.line_chart # density
+
+    st.subheader('Wind Speed')
+    st.area_chart(df[['day', 'max_wind', 'avg_wind', 'min_wind']], x = 'day')
+
+
+    st.divider()
+    st.subheader('Temperature')
+    st.line_chart(df[['day', 'max_temp', 'min_temp']], x = 'day', y = ['max_temp', 'min_temp'])
+    # add axis labels for day
+
+    # wind lind chart; daily max, min, and avg
+
+
+    st.header('AI-generated past weather summary', divider='rainbow')
+
+
+    st.markdown('''Happy Streamlit-ing! :balloon:''')
 
 
     # CHART 1: COMBINED BAR AND LINE CHART
