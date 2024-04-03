@@ -25,7 +25,7 @@ tab1, tab2, tab3 = st.tabs(["Weather", "Snowpack", "MWAC Research Portal"])
 #######################
 
 with tab1:
-    st.image('mwac_logo.png', use_column_width  = 'always')
+    st.image('huntington.jpeg', use_column_width  = 'always')
 
     #################
     # GENERATE DATA #
@@ -116,6 +116,7 @@ with tab1:
 #################
 
 with tab2:
+    st.image('huntington.jpeg', use_column_width  = 'always')
     # TITLE & INFORMATION
     st.header('Hermit Lake Snowdepth vs. Seasonal Averages', divider='rainbow')
 
@@ -156,6 +157,7 @@ with tab3:
     csv = convert_df(historical_data)
 
     st.header('Hermit Lake Snowplot - Since 2001', divider='rainbow')
+    st.image('mwac_logo.png', use_column_width  = 'always')
     st.image('snowplot.png', use_column_width  = 'always')
 
     st.markdown('''
