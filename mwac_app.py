@@ -18,7 +18,7 @@ historical_averages = historical_averages.drop(['depth_cm'], axis = 1)
 ###############
 
 
-tab1, tab2, tab3 = st.tabs(["Observatory & NFS Weather Data Viewer", "MWAC Snowpack Data Viewer", "Download MWAC Our Data"])
+tab1, tab2, tab3 = st.tabs(["Weather", "Snowpack", "MWAC Research Portal"])
 
 #######################
 # Weather Data Viewer #
@@ -26,8 +26,7 @@ tab1, tab2, tab3 = st.tabs(["Observatory & NFS Weather Data Viewer", "MWAC Snowp
 
 with tab1:
     st.image('mwac_logo.png', use_column_width  = 'always')
-    col1, col2, col3, col4, col5 = st.columns(5)
-    col1.image
+
     #################
     # GENERATE DATA #
     #################
@@ -118,7 +117,8 @@ with tab1:
 
 with tab2:
     # TITLE & INFORMATION
-    st.title("Snowdepth at Hermit Lake")
+    st.header('Hermit Lake Snowdepth vs. Seasonal Averages', divider='rainbow')
+
 
     # METRICS
     def convert_df(df):
@@ -133,8 +133,9 @@ with tab2:
     col2.metric("Total Snowfall", "350cm", "+5% YoY")
 
     # SELECT BOX
-    st.divider()
-    winter_selection = st.selectbox("Select Year", options = set(historical_data.winter), index = 4)
+    winter_selection = st.selectbox("Select Year",
+                                    options = set(historical_data.winter),
+                                    placeholder="2023-2024")
     selection = historical_data.loc[historical_data.winter==winter_selection, ['day_of_winter', 'depth_cm']]
     df = selection.merge(historical_averages, on = 'day_of_winter', how = 'right')
 
@@ -154,16 +155,21 @@ with tab3:
 
     csv = convert_df(historical_data)
 
-    md = st.text_area('This data has been collected daily at Hermit Lake since 2001. Happy Researching! :balloon:')
+    st.header('Hermit Lake Snowplot - Since 2001', divider='rainbow')
+    st.image('snowplot.png', use_column_width  = 'always')
+
+    st.markdown('''
+Snowpack observations have been systematically collected since 2001 at the Hermit Lake Ranger Station, located just below Tuckerman Ravine on Mount Washington, New Hampshire. These records are accessible for download in CSV file format.''')
+
+    st.header('Download the data', divider='rainbow')
+    st.markdown('''Data is available for research use only. No commercial usage of the data is permitted without explicit permission of the Mount Washington Avalanche Center''')
     st.download_button(
         label="Download data as CSV",
         data=csv,
         file_name='hermit_lake_snowdepth.csv',
         mime='text/csv',
     )
-    st.markdown(md)
 
 
-    st.divider()
 
 
