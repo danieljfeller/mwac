@@ -13,6 +13,25 @@ historical_averages = pd.read_csv("data/historical_averages.csv")
 historical_averages['historical_depth'] = historical_averages['depth_cm']
 historical_averages = historical_averages.drop(['depth_cm'], axis = 1)
 
+################
+# prepare data #
+################
+
+df = pd.DataFrame({
+    'day': np.arange(1, 15),
+    'max_temp': np.random.randint(20, 33, size=14),
+    'new_snow_cm': np.random.randint(1, 11, size=14),
+    'avg_wind': np.random.uniform(1, 100, size=14),
+    'mean_direction': np.random.uniform(180, 270, size=14)
+})
+
+df['max_wind'] = df['avg_wind'] + np.random.uniform(3, 12, size=14)
+df['min_wind'] = df['avg_wind'] - np.random.uniform(5, 12, size=14)
+df['min_temp'] = df['max_temp'] - np.random.uniform(4, 20, size=14)
+df['new_swe_mm'] = df['new_snow_cm'] * np.random.normal(0.1, 0.15, size=14)
+
+df['snow_density_pct'] = (df['new_swe_mm'] / df['new_snow_cm']) * 100
+
 ###############
 # define tabs #
 ###############
@@ -25,27 +44,16 @@ tab1, tab2, tab3 = st.tabs(['Skier/Climber', 'Professional', 'Researcher'])
 #######################
 
 with tab1:
-    st.image('huntington.jpeg', use_column_width  = 'always')
 
     #################
     # GENERATE DATA #
     #################
 
+    st.header('AI-generated past weather summary', divider='rainbow')
+    st.markdown('''Over the past 7 days, temperatures have fluctuated across the Presidential Range. Significant recent snowfall and high and variable winds have yielded a complex snowpack.''')
 
-    df = pd.DataFrame({
-        'day': np.arange(1, 15),
-        'max_temp': np.random.randint(20, 33, size=14),
-        'new_snow_cm': np.random.randint(1, 11, size=14),
-        'avg_wind': np.random.uniform(1, 100, size=14),
-        'mean_direction': np.random.uniform(180, 270, size=14)
-    })
-
-    df['max_wind'] = df['avg_wind'] + np.random.uniform(3, 12, size=14)
-    df['min_wind'] = df['avg_wind'] - np.random.uniform(5, 12, size=14)
-    df['min_temp'] = df['max_temp'] - np.random.uniform(4, 20, size=14)
-    df['new_swe_mm'] = df['new_snow_cm'] * np.random.normal(0.1, 0.15, size=14)
-
-    df['snow_density_pct'] = (df['new_swe_mm'] / df['new_snow_cm'])*100
+    st.header('AI-generated 48hr forecast summary', divider='rainbow')
+    st.markdown('''The next two days will include sporadic snow showers  entail significant wind speeds, with temperatures ranging from -10°F to 35°F. The forecast predicts accumulative snowfall reaching up to 9 inches over the period, accompanied by rapid changes in weather conditions, including sunny days and snow showers. This variability underscores the mountain's reputation for unpredictable and extreme weather conditions, exemplifying the challenges of meteorological forecasting in alpine environments. ''')
 
 
     # 24 hr metrics
@@ -61,21 +69,6 @@ with tab1:
 
 
 
-    ## Forecast
-
-    st.header('AI-generated past weather summary', divider='rainbow')
-    st.header('AI-generated 48hr forecast summary', divider='rainbow')
-
-
-
-    ## Historical
-
-    Height of Snow
-    Temperature Profile
-    Wind Profile
-    st.header('AI-generated forecast summary', divider='rainbow')
-
-    st.markdown('''The next 5 days will include up to 3 feet of new snow on an icy bed surface. Weather will entail significant wind speeds, with temperatures ranging from -10°F to 35°F. The forecast predicts accumulative snowfall reaching up to 9 inches over the period, accompanied by rapid changes in weather conditions, including sunny days and snow showers. This variability underscores the mountain's reputation for unpredictable and extreme weather conditions, exemplifying the challenges of meteorological forecasting in alpine environments. ''')
 
 
     st.header('Forecast Data', divider='rainbow')
