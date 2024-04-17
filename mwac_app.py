@@ -57,18 +57,22 @@ with tab1:
 
 
     # 24 hr metrics
-    st.header('24 hour Weather Stats', divider='rainbow')
+    st.header('Past 48hour Weather Stats', divider='rainbow')
     col1, col2, col3, col4, col5 = st.columns(5)
     col1.metric("Average Wind",
               "20mph", "+10mph")
     col2.metric("Max Wind", "43mph")
     col3.metric("24 snowfall (cm)", "5cm", "+5cm")
-    col4.metric("Max Temp", "23F")
+    col4.metric("Max Temp", "34F")
     col5.metric("Min Temp", "10F")
 
 
+#################
+# Snowdepth Tab #
+#################
 
-
+with tab2:
+    st.image('huntington.jpeg', use_column_width  = 'always')
 
 
     st.header('Forecast Data', divider='rainbow')
@@ -85,14 +89,6 @@ with tab1:
     st.subheader('Temperature')
     st.line_chart(df[['day', 'max_temp', 'min_temp']], x = 'day', y = ['max_temp', 'min_temp'])
     # add axis labels for day
-
-    # wind lind chart; daily max, min, and avg
-
-
-    st.header('AI-generated past weather summary', divider='rainbow')
-
-
-    st.markdown('''Happy Streamlit-ing! :balloon:''')
 
 
     # CHART 1: COMBINED BAR AND LINE CHART
@@ -117,38 +113,8 @@ with tab1:
 
     # wind lind chart; daily max, min, and avg
 
-#################
-# Snowdepth Tab #
-#################
-
-with tab2:
-    st.image('huntington.jpeg', use_column_width  = 'always')
-    # TITLE & INFORMATION
-    st.header('Hermit Lake Snowdepth vs. Seasonal Averages', divider='rainbow')
 
 
-    # METRICS
-    def convert_df(df):
-        # IMPORTANT: Cache the conversion to prevent computation on every rerun
-        return df.to_csv().encode('utf-8')
-    csv = convert_df(historical_data)
-    today = historical_data.loc[historical_data.winter == '2023-2024',]['day_of_winter'].max()
-
-    col1, col2 = st.columns(2)
-    col1.metric("Current Snowpack",
-              "111cm", "-8% YoY")
-    col2.metric("Total Snowfall", "350cm", "+5% YoY")
-
-    # SELECT BOX
-    winter_selection = st.selectbox("Select Year",
-                                    options = set(historical_data.winter),
-                                    placeholder="2023-2024")
-    selection = historical_data.loc[historical_data.winter==winter_selection, ['day_of_winter', 'depth_cm']]
-    df = selection.merge(historical_averages, on = 'day_of_winter', how = 'right')
-
-
-    # LINE CHART
-    st.area_chart(df, x="day_of_winter", y=["historical_depth", "depth_cm"])
 
 ##########################
 # Download MWAC Data tab #
@@ -177,6 +143,34 @@ Snowpack observations have been systematically collected since 2001 at the Hermi
         file_name='hermit_lake_snowdepth.csv',
         mime='text/csv',
     )
+
+
+    # TITLE & INFORMATION
+    st.header('Hermit Lake Snowdepth vs. Seasonal Averages', divider='rainbow')
+
+
+    # METRICS
+    def convert_df(df):
+        # IMPORTANT: Cache the conversion to prevent computation on every rerun
+        return df.to_csv().encode('utf-8')
+    csv = convert_df(historical_data)
+    today = historical_data.loc[historical_data.winter == '2023-2024',]['day_of_winter'].max()
+
+    col1, col2 = st.columns(2)
+    col1.metric("Current Snowpack",
+              "111cm", "-8% YoY")
+    col2.metric("Total Snowfall", "350cm", "+5% YoY")
+
+    # SELECT BOX
+    winter_selection = st.selectbox("Select Year",
+                                    options = set(historical_data.winter),
+                                    placeholder="2023-2024")
+    selection = historical_data.loc[historical_data.winter==winter_selection, ['day_of_winter', 'depth_cm']]
+    df = selection.merge(historical_averages, on = 'day_of_winter', how = 'right')
+
+
+    # LINE CHART
+    st.area_chart(df, x="day_of_winter", y=["historical_depth", "depth_cm"])
 
 
 
