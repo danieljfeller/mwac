@@ -18,7 +18,7 @@ historical_averages = historical_averages.drop(['depth_cm'], axis = 1)
 ###############
 
 
-tab1, tab2, tab3 = st.tabs(["Weather", "Snowpack", "MWAC Research Portal"])
+tab1, tab2, tab3 = st.tabs(['Skier/Climber', 'Professional', 'Researcher'])
 
 #######################
 # Weather Data Viewer #
@@ -57,7 +57,22 @@ with tab1:
     col3.metric("24 snowfall (cm)", "5cm", "+5cm")
     col4.metric("Max Temp", "23F")
     col5.metric("Min Temp", "10F")
-    
+
+
+
+
+    ## Forecast
+
+    st.header('AI-generated past weather summary', divider='rainbow')
+    st.header('AI-generated 48hr forecast summary', divider='rainbow')
+
+
+
+    ## Historical
+
+    Height of Snow
+    Temperature Profile
+    Wind Profile
     st.header('AI-generated forecast summary', divider='rainbow')
 
     st.markdown('''The next 5 days will include up to 3 feet of new snow on an icy bed surface. Weather will entail significant wind speeds, with temperatures ranging from -10°F to 35°F. The forecast predicts accumulative snowfall reaching up to 9 inches over the period, accompanied by rapid changes in weather conditions, including sunny days and snow showers. This variability underscores the mountain's reputation for unpredictable and extreme weather conditions, exemplifying the challenges of meteorological forecasting in alpine environments. ''')
@@ -108,8 +123,6 @@ with tab1:
     # add axis labels for day
 
     # wind lind chart; daily max, min, and avg
-
-
 
 #################
 # Snowdepth Tab #
