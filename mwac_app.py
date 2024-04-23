@@ -39,14 +39,14 @@ df['snow_density_pct'] = (df['new_swe_mm'] / df['new_snow_cm']) * 100
 
 tab1, tab2, tab3 = st.tabs(['Skier/Climber', 'Professional', 'Researcher'])
 
-#######################
-# Weather Data Viewer #
-#######################
+###################
+# Skier / Climber #
+###################
 
 with tab1:
 
     #################
-    # GENERATE DATA #
+    # Generate Data #
     #################
 
     st.header('AI-generated past weather summary', divider='rainbow')
@@ -67,9 +67,9 @@ with tab1:
     col5.metric("Min Temp", "10F")
 
 
-#################
-# Snowdepth Tab #
-#################
+################
+# Professional #
+################
 
 with tab2:
     st.image('huntington.jpeg', use_column_width  = 'always')
@@ -116,9 +116,9 @@ with tab2:
 
 
 
-##########################
-# Download MWAC Data tab #
-##########################
+##############
+# Researcher #
+##############
 
 with tab3:
 
