@@ -96,30 +96,6 @@ with tab2:
     # add axis labels for day
     st.divider()
     st.title('Past Weather Data')
-    
-        # TITLE & INFORMATION
-    st.header('Hermit Lake Snowdepth vs. Seasonal Averages', divider='rainbow')
-
-
-    # METRICS
-    def convert_df(df):
-        # IMPORTANT: Cache the conversion to prevent computation on every rerun
-        return df.to_csv().encode('utf-8')
-    csv = convert_df(historical_data)
-    today = historical_data.loc[historical_data.winter == '2023-2024',]['day_of_winter'].max()
-
-    col1, col2 = st.columns(2)
-    col1.metric("Current Snowpack",
-              "111cm", "-8% YoY")
-    col2.metric("Total Snowfall", "350cm", "+5% YoY")
-
-    # SELECT BOX
-    winter_selection = st.selectbox("Select Year",
-                                    options = set(historical_data.winter),
-                                    placeholder="2023-2024")
-    selection = historical_data.loc[historical_data.winter==winter_selection, ['day_of_winter', 'depth_cm']]
-    df = selection.merge(historical_averages, on = 'day_of_winter', how = 'right')
-
 
     # LINE CHART
     st.area_chart(df, x="day_of_winter", y=["historical_depth", "depth_cm"])
