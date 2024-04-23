@@ -37,7 +37,7 @@ df['snow_density_pct'] = (df['new_swe_mm'] / df['new_snow_cm']) * 100
 ###############
 
 
-tab1, tab2, tab3 = st.tabs(['Avalanche Weather Summary', 'Data', 'Download'])
+tab1, tab2, tab3 = st.tabs(['Avalanche Weather Summary', 'Snow & Weather Data', 'Download'])
 
 ###################
 # Skier / Climber #
