@@ -49,13 +49,6 @@ with tab1:
     # Generate Data #
     #################
 
-    st.header('AI-generated past weather summary', divider='rainbow')
-    st.markdown('''Over the past 7 days, temperatures have fluctuated across the Presidential Range. Significant recent snowfall and high and variable winds have yielded a complex snowpack.''')
-
-    st.header('AI-generated 48hr forecast summary', divider='rainbow')
-    st.markdown('''The next two days will include sporadic snow showers  entail significant wind speeds, with temperatures ranging from -10°F to 35°F. The forecast predicts accumulative snowfall reaching up to 9 inches over the period, accompanied by rapid changes in weather conditions, including sunny days and snow showers. This variability underscores the mountain's reputation for unpredictable and extreme weather conditions, exemplifying the challenges of meteorological forecasting in alpine environments. ''')
-
-
     # 24 hr metrics
     st.header('Past 48hour Weather Stats', divider='rainbow')
     col1, col2, col3, col4, col5 = st.columns(5)
@@ -65,6 +58,13 @@ with tab1:
     col3.metric("24 snowfall (cm)", "5cm", "+5cm")
     col4.metric("Max Temp", "34F")
     col5.metric("Min Temp", "10F")
+
+    st.header('AI-generated past weather summary', divider='rainbow')
+    st.markdown('''Over the past 7 days, temperatures have fluctuated across the Presidential Range. Significant recent snowfall and high and variable winds have yielded a complex snowpack.''')
+
+    st.header('AI-generated 48hr forecast summary', divider='rainbow')
+    st.markdown('''The next two days will include sporadic snow showers  entail significant wind speeds, with temperatures ranging from -10°F to 35°F. The forecast predicts accumulative snowfall reaching up to 9 inches over the period, accompanied by rapid changes in weather conditions, including sunny days and snow showers. This variability underscores the mountain's reputation for unpredictable and extreme weather conditions, exemplifying the challenges of meteorological forecasting in alpine environments. ''')
+
 
 
 ################
