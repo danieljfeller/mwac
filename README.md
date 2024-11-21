@@ -3,7 +3,7 @@
 
 ### Project Overview
 
-![Data Flow](mwac_app_dataflow.png "Data Flow")
+![Data Flow](media/mwac_app_dataflow.png "Data Flow")
 
 
 The Mt. Washington Snowpack Visualization App is a Python-based web application designed to provide an interactive and 

@@ -37,68 +37,31 @@ df['snow_density_pct'] = (df['new_swe_mm'] / df['new_snow_cm']) * 100
 ###############
 
 
-tab1, tab2, tab3 = st.tabs(['Avalanche Weather Summary', 'Snow & Weather Data', 'Download'])
+tab1, tab2, tab3, tab4 = st.tabs(['Snowpack Tracker', 'Recent Weather', 'Forecast', 'Download Our Data'])
 
 ###################
 # Skier / Climber #
 ###################
 
 with tab1:
+    st.image('media/mwac_logo.png', use_container_width  = 'always')
 
-    #################
-    # Generate Data #
-    #################
+    selected_location = st.selectbox(
+    "Select Weather Station:",
+    ("Hermit Lake", "Harvard Cabin", "Grey Knob", "Mount Washington Summit", "The Lip", "Pinkham Notch"),
+    index=None,
+    placeholder="Choose a location...")
+    st.write("You selected:", selected_location)
 
     # 24 hr metrics
-    st.header('Past 48hour Weather Stats', divider='rainbow')
     col1, col2, col3, col4, col5 = st.columns(5)
-    col1.metric("Average Wind",
-              "20mph", "+10mph")
-    col2.metric("Max Wind", "43mph")
-    col3.metric("24 snowfall (cm)", "5cm", "+5cm")
-    col4.metric("Max Temp", "34F")
-    col5.metric("Min Temp", "10F")
+    col1.metric("24h snowfall (cm)", "5cm")
+    col2.metric("48h snowfall", "10cm")
+    col3.metric("72h snowfall", "12cm")
+    col4.metric("7d snowfall", "43cm")
+    col5.metric("Season snowfall", "210cm")
 
-    st.header('AI-generated past weather summary', divider='rainbow')
-    st.markdown('''Over the past 7 days, temperatures have fluctuated across the Presidential Range. Significant recent snowfall and high and variable winds have yielded a complex snowpack.''')
-
-    st.header('AI-generated 48hr forecast summary', divider='rainbow')
-    st.markdown('''The next two days will include sporadic snow showers  entail significant wind speeds, with temperatures ranging from -10°F to 35°F. The forecast predicts accumulative snowfall reaching up to 9 inches over the period, accompanied by rapid changes in weather conditions, including sunny days and snow showers. This variability underscores the mountain's reputation for unpredictable and extreme weather conditions, exemplifying the challenges of meteorological forecasting in alpine environments. ''')
-
-
-
-################
-# Professional #
-################
-
-with tab2:
-    st.image('huntington.jpeg', use_column_width  = 'always')
-
-
-    st.header('Forecast Data', divider='rainbow')
-
-    st.subheader('New Snow & Snow Density')
-    st.bar_chart(df[['day', 'new_snow_cm', 'snow_density_pct']], x = 'day') # for new_snow
-    #st.line_chart # density
-
-    st.subheader('Wind Speed')
-    st.area_chart(df[['day', 'max_wind', 'avg_wind', 'min_wind']], x = 'day')
-
-
-    st.divider()
-    st.subheader('Temperature')
-    st.line_chart(df[['day', 'max_temp', 'min_temp']], x = 'day', y = ['max_temp', 'min_temp'])
-    # add axis labels for day
-
-
-    # CHART 1: COMBINED BAR AND LINE CHART
-    # precipitation; density, new snow (cm)
-    # add axis labels for day
-    st.divider()
-    st.title('Past Weather Data')
-    
-        # SNOWPACK DEPTH
-    st.header('Hermit Lake Snowdepth vs. Seasonal Averages', divider='rainbow')
+    st.header('Historical Comparison', divider='rainbow')
 
 
     # METRICS
@@ -114,17 +77,93 @@ with tab2:
     col2.metric("Total Snowfall", "350cm", "+5% YoY")
 
     # SELECT BOX
-    winter_selection = st.selectbox("Select Year",
+    winter_selection3 = st.selectbox("Select YWinter",
                                     options = set(historical_data.winter),
                                     placeholder="2023-2024")
-    selection = historical_data.loc[historical_data.winter==winter_selection, ['day_of_winter', 'depth_cm']]
+    selection = historical_data.loc[historical_data.winter==winter_selection3, ['day_of_winter', 'depth_cm']]
     df = selection.merge(historical_averages, on = 'day_of_winter', how = 'right')
 
 
     # LINE CHART
     st.area_chart(df, x="day_of_winter", y=["historical_depth", "depth_cm"])
+
+with tab2:
+
+    #################
+    # Generate Data #
+    #################
+
+    st.image('media/mwac_logo.png', use_container_width  = 'always')
+
+
+    selected_location = st.selectbox(
+    "Weather Station:",
+    ("Hermit Lake", "Harvard Cabin", "Grey Knob", "Mount Washington Summit", "The Lip", "Pinkham Notch"),
+    index=None,
+    placeholder="Choose a location...")
+
+
+    selected_timeframe = st.selectbox(
+    "Timeframe",
+    ("Past 24 hours", "Past 48 hours", "Past 72 hours", "Past 7 days", "Past 30 days"),
+    index=None,
+    placeholder="Choose a timeframe...")
+
+    
+    # 24 hr metrics
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.metric("Average Wind",
+              "20mph", "+10mph")
+    col2.metric("Max Wind", "43mph")
+    col3.metric("24 snowfall (cm)", "5cm", "+5cm")
+    col4.metric("Max Temp", "34F")
+    col5.metric("Min Temp", "10F")
+
+    st.header('Past weather summary', divider='rainbow')
+    st.markdown('''Over the past 7 days, temperatures have fluctuated across the Presidential Range. Significant recent snowfall and high and variable winds have yielded a complex snowpack.''')
+
+
+
+################
+# Professional #
+################
+
+with tab3:    
+
+    st.image('media/mwac_logo.png', use_container_width  = 'always')
+ 
+    # METRICS
+    def convert_df(df):
+        # IMPORTANT: Cache the conversion to prevent computation on every rerun
+        return df.to_csv().encode('utf-8')
+    csv = convert_df(historical_data)
+    today = historical_data.loc[historical_data.winter == '2023-2024',]['day_of_winter'].max()
+
+    col1, col2 = st.columns(2)
+    col1.metric("Current Snowpack",
+              "111cm", "-8% YoY")
+    col2.metric("Total Snowfall", "350cm", "+5% YoY")
+
+    # SELECT BOX
+    winter2_selection = st.selectbox("Select Year",
+                                    options = set(historical_data.winter),
+                                    placeholder="2023-2024")
+    selection = historical_data.loc[historical_data.winter==winter2_selection, ['day_of_winter', 'depth_cm']]
+    df = selection.merge(historical_averages, on = 'day_of_winter', how = 'right')
+    df['day'] = df['day_of_winter'] 
+    df['new_snow_cm'] = 1
+    df['snow_density_pct'] = 0.20
+    df['max_temp'] = 32
+    df['min_temp'] = 20
+    df['max_wind'] = 15
+    df['min_wind'] = 5
+    df['avg_wind'] = 10
+
+    # LINE CHART
+    st.area_chart(df, x="day_of_winter", y=["historical_depth", "depth_cm"])
     
     st.header('New Snow & Snow Density', divider='rainbow')
+    print(df.columns)
     st.bar_chart(df[['day', 'new_snow_cm', 'snow_density_pct']], x = 'day') # for new_snow
     #st.line_chart # density
 
@@ -136,11 +175,8 @@ with tab2:
 
     st.divider()
     st.header('Temperature', divider='rainbow')
-    st.line_chart(df[['day', 'max_temp', 'min_temp']], x = 'day', y = ['max_temp', 'min_temp'])
+    #st.line_chart(df[['day', 'max_temp', 'min_temp']], x = 'day', y = ['max_temp', 'min_temp'])
     # add axis labels for day
-
-    # wind lind chart; daily max, min, and avg
-
 
 
 
@@ -148,7 +184,7 @@ with tab2:
 # Researcher #
 ##############
 
-with tab3:
+with tab4:
 
     def convert_df(df):
         # IMPORTANT: Cache the conversion to prevent computation on every rerun
@@ -156,9 +192,8 @@ with tab3:
 
     csv = convert_df(historical_data)
 
-    st.header('Hermit Lake Snowplot - Since 2001', divider='rainbow')
-    st.image('mwac_logo.png', use_column_width  = 'always')
-    st.image('snowplot.png', use_column_width  = 'always')
+    st.image('media/mwac_logo.png', use_container_width  = 'always')
+    st.image('media/snowplot.png', use_container_width  = 'always')
 
     st.markdown('''
 Snowpack observations have been systematically collected since 2001 at the Hermit Lake Ranger Station, located just below Tuckerman Ravine on Mount Washington, New Hampshire. These records are accessible for download in CSV file format.''')
@@ -173,32 +208,7 @@ Snowpack observations have been systematically collected since 2001 at the Hermi
     )
 
 
-    # TITLE & INFORMATION
-    st.header('Hermit Lake Snowdepth vs. Seasonal Averages', divider='rainbow')
 
-
-    # METRICS
-    def convert_df(df):
-        # IMPORTANT: Cache the conversion to prevent computation on every rerun
-        return df.to_csv().encode('utf-8')
-    csv = convert_df(historical_data)
-    today = historical_data.loc[historical_data.winter == '2023-2024',]['day_of_winter'].max()
-
-    col1, col2 = st.columns(2)
-    col1.metric("Current Snowpack",
-              "111cm", "-8% YoY")
-    col2.metric("Total Snowfall", "350cm", "+5% YoY")
-
-    # SELECT BOX
-    winter_selection = st.selectbox("Select Year",
-                                    options = set(historical_data.winter),
-                                    placeholder="2023-2024")
-    selection = historical_data.loc[historical_data.winter==winter_selection, ['day_of_winter', 'depth_cm']]
-    df = selection.merge(historical_averages, on = 'day_of_winter', how = 'right')
-
-
-    # LINE CHART
-    st.area_chart(df, x="day_of_winter", y=["historical_depth", "depth_cm"])
 
 
 
